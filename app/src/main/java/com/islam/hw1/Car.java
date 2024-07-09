@@ -1,6 +1,7 @@
 package com.islam.hw1;
 
 import android.graphics.Rect;
+import android.graphics.RenderNode;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -9,9 +10,11 @@ public class Car {
     private final ImageView carView;
     private int currentLane;
     private float laneWidth;
+    private final int laneCount;
 
-    public Car(ImageView carView) {
+    public Car(ImageView carView, int laneCount) {
         this.carView = carView;
+        this.laneCount = laneCount;
         this.currentLane = 1; // Start in the middle lane
     }
 
@@ -23,7 +26,7 @@ public class Car {
     }
 
     public void moveRight() {
-        if (currentLane < LaneManager.LANE_COUNT - 1) {
+        if (currentLane < laneCount - 1) {
             currentLane++;
             updatePosition();
         }
@@ -38,13 +41,17 @@ public class Car {
         updatePosition();
     }
 
-    public boolean checkCollision(Obstacle obstacle) {
+    public boolean checkCollision(View objectView) {
         Rect carRect = new Rect();
         carView.getHitRect(carRect);
 
-        Rect obstacleRect = new Rect();
-        obstacle.getView().getHitRect(obstacleRect);
+        Rect objectRect = new Rect();
+        objectView.getHitRect(objectRect);
 
-        return Rect.intersects(carRect, obstacleRect);
+        return Rect.intersects(carRect, objectRect);
+    }
+
+    public ImageView getView() {
+        return carView;
     }
 }

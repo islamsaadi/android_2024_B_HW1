@@ -8,12 +8,14 @@
     android:id="@+id/mainLayout"
     tools:context=".MainActivity">
 
+
     <LinearLayout
         android:id="@+id/lanesContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@color/black">
 
     </LinearLayout>
 
@@ -21,6 +23,7 @@
         android:id="@+id/car"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:contentDescription="@string/car_icon"
         android:src="@drawable/ic_car"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
@@ -45,7 +48,7 @@
         android:minHeight="0dp"
         android:padding="10dp"
         android:backgroundTint="@color/buttonBackgroundColor"
-        android:textColor="@color/buttonTextColor"/>/>
+        android:textColor="@color/buttonTextColor"/>
 
     <Button
         android:id="@+id/btnRight"
@@ -66,7 +69,6 @@
         android:padding="10dp"
         android:backgroundTint="@color/buttonBackgroundColor"
         android:textColor="@color/buttonTextColor"/>
-        />
 
     <LinearLayout
         android:id="@+id/lifeContainer"
@@ -75,4 +77,10 @@
         android:orientation="horizontal">
 
     </LinearLayout>
+
+    <com.islam.hw1.RoadLinesView
+        android:id="@+id/roadLinesView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </RelativeLayout>

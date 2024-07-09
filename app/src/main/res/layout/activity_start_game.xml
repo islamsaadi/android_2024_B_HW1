@@ -18,14 +18,42 @@
         android:layout_marginTop="100dp"
         android:fontFamily="sans-serif-condensed"/>
 
-    <Button
-        android:id="@+id/btnStartGame"
-        android:layout_width="200dp"
-        android:layout_height="80dp"
-        android:text="@string/start_game"
-        android:textSize="24sp"
-        android:layout_centerInParent="true"
-        android:backgroundTint="@color/buttonBackgroundColor"
-        android:textColor="@color/buttonTextColor"/>
+<!--    <Button-->
+<!--        android:id="@+id/btnStartGame"-->
+<!--        android:layout_width="200dp"-->
+<!--        android:layout_height="80dp"-->
+<!--        android:text="@string/start_game"-->
+<!--        android:textSize="24sp"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:backgroundTint="@color/buttonBackgroundColor"-->
+<!--        android:textColor="@color/buttonTextColor"/>-->
 
+    <Button
+        android:id="@+id/btnButtonsMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/buttons_mode"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:padding="10dp"/>
+
+    <Button
+        android:id="@+id/btnSensorsMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sensors_mode"
+        android:layout_below="@id/btnButtonsMode"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"/>
+
+    <Button
+        android:id="@+id/btnHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/achievements"
+        android:layout_below="@id/btnSensorsMode"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"/>
 </RelativeLayout>

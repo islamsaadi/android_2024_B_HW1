@@ -4,4 +4,8 @@
     <string name="start_game">Start Game</string>
     <string name="play_again">Play Again</string>
     <string name="game_over">Game Over</string>
+    <string name="buttons_mode">Buttons Mode</string>
+    <string name="sensors_mode">Sensors Mode</string>
+    <string name="achievements">Achievements</string>
+    <string name="car_icon">car icon</string>
 </resources>

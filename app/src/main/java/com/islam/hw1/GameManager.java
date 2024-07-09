@@ -1,7 +1,9 @@
 package com.islam.hw1;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -16,7 +18,8 @@ public class GameManager {
     private final LaneManager laneManager;
     private final ArrayList<Obstacle> obstacles;
     private final Random random;
-    private int obstacleSpeed = 15;
+    private final ArrayList<ImageView> coins;
+    private final int obstacleSpeed = 15;
     private int lives = 3;
 
     private int gameLoopIterations = 0;
@@ -28,7 +31,16 @@ public class GameManager {
     private final Button btnLeft;
     private final Button btnRight;
 
-    public GameManager(Context context, Car car, LaneManager laneManager, Button btnLeft, Button btnRight) {
+    private final int laneCount;
+    private int score = 0;
+
+    private final String mode;
+
+    private final SharedPreferences sharedPreferences;
+    private static final String PREFS_NAME = "game_prefs";
+    private static final String KEY_POINTS = "points";
+
+    public GameManager(Context context, String mode, Car car, LaneManager laneManager, Button btnLeft, Button btnRight, int laneCount) {
         this.context = context;
         this.car = car;
         this.laneManager = laneManager;
@@ -36,29 +48,39 @@ public class GameManager {
         this.random = new Random();
         this.btnLeft = btnLeft;
         this.btnRight = btnRight;
+        this.laneCount = laneCount;
+        this.coins = new ArrayList<>();
+        this.sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        this.mode = mode;
+
     }
 
     public void updateGame() {
         gameLoopIterations++;
         if (gameLoopIterations - lastTimeObsticaleGenerated > 50 ){
-            generateObstacles();
+            generateObstaclesAndCoins();
             lastTimeObsticaleGenerated = gameLoopIterations;
         }
-        moveObstacles();
+
+        moveObstaclesAndCoins();
+
+        if(! ("sensors".equals(mode))) {
+            btnLeft.bringToFront();
+            btnRight.bringToFront();
+        }
+
         checkCollision();
     }
 
-    private void generateObstacles() {
+    private void generateObstaclesAndCoins() {
         Set<Integer> occupiedLanes = new HashSet<>();
-
-        // to ensure leaving at least one lane free
-        int maxObstacles = laneManager.getLaneCount() - 1;
+        int maxObstacles = laneCount - 1;
         int obstaclesToGenerate = random.nextInt(maxObstacles) + 1;
 
         for (int i = 0; i < obstaclesToGenerate; i++) {
             int lane;
             do {
-                lane = random.nextInt(laneManager.getLaneCount());
+                lane = random.nextInt(laneCount);
             } while (occupiedLanes.contains(lane));
             occupiedLanes.add(lane);
 
@@ -67,31 +89,78 @@ public class GameManager {
             ((RelativeLayout) laneManager.getLanesContainer().getParent()).addView(obstacle.getView());
         }
 
-        btnLeft.bringToFront();
-        btnRight.bringToFront();
+        int coinsToGenerate = random.nextInt(laneCount - obstaclesToGenerate);
+        for (int i = 0; i < coinsToGenerate; i++) {
+            int lane;
+            do {
+                lane = random.nextInt(laneCount);
+            } while (occupiedLanes.contains(lane));
+            occupiedLanes.add(lane);
+
+            ImageView coin = new ImageView(context);
+            coin.setImageResource(R.drawable.ic_coin);
+            coin.setLayoutParams(new RelativeLayout.LayoutParams(50, 50));
+            coin.setX(laneManager.getLaneWidth() * lane + (laneManager.getLaneWidth() - 50) / 2);
+            coin.setY(-100);
+            coins.add(coin);
+            ((RelativeLayout) laneManager.getLanesContainer().getParent()).addView(coin);
+        }
+
     }
 
-    private void moveObstacles() {
-        ArrayList<Obstacle> toRemove = new ArrayList<>();
+    private void moveObstaclesAndCoins() {
+        ArrayList<Obstacle> obstaclesToRemove = new ArrayList<>();
         for (Obstacle obstacle : obstacles) {
             obstacle.moveDown(obstacleSpeed);
             if (obstacle.isOutOfView()) {
-                toRemove.add(obstacle);
+                obstaclesToRemove.add(obstacle);
             }
         }
-        for (Obstacle obstacle : toRemove) {
+        for (Obstacle obstacle : obstaclesToRemove) {
             ((RelativeLayout) laneManager.getLanesContainer().getParent()).removeView(obstacle.getView());
             obstacles.remove(obstacle);
+        }
+
+        ArrayList<ImageView> coinsToRemove = new ArrayList<>();
+        for (ImageView coin : coins) {
+            coin.setY(coin.getY() + obstacleSpeed);
+            if (coin.getY() > car.getView().getBottom()) {
+                coinsToRemove.add(coin);
+            }
+        }
+        for (ImageView coin : coinsToRemove) {
+            ((RelativeLayout) laneManager.getLanesContainer().getParent()).removeView(coin);
+            coins.remove(coin);
         }
     }
 
     private void checkCollision() {
         for (Obstacle obstacle : obstacles) {
-            if (car.checkCollision(obstacle)) {
+            if (car.checkCollision(obstacle.getView())) {
                 handleCrash();
                 obstacle.resetPosition();
             }
         }
+
+        ArrayList<ImageView> coinsToRemove = new ArrayList<>();
+        for (ImageView coin : coins) {
+            if (car.checkCollision(coin)) {
+                coinsToRemove.add(coin);
+                score += 10;
+                animateCoinCollection(coin);
+            }
+        }
+        for (ImageView coin : coinsToRemove) {
+            ((RelativeLayout) laneManager.getLanesContainer().getParent()).removeView(coin);
+            coins.remove(coin);
+        }
+    }
+
+    private void animateCoinCollection(ImageView coin) {
+        coin.animate().alpha(0f).setDuration(500).withEndAction(() -> {
+            ((RelativeLayout) laneManager.getLanesContainer().getParent()).removeView(coin);
+            coin.setAlpha(1f);
+        });
     }
 
     private void handleCrash() {
@@ -103,12 +172,16 @@ public class GameManager {
                 gameListener.onCrashWithObstacle(lives);
             }
         }
+    }
 
-
+    private void savePoints() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(KEY_POINTS, score);
+        editor.apply();
     }
 
     private void gameOver() {
-
+        savePoints();
         if (gameListener != null)
             gameListener.onGameOver();
     }

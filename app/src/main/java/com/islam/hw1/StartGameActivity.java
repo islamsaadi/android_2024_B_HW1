@@ -13,9 +13,24 @@ public class StartGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_game);
 
-        Button startButton = findViewById(R.id.btnStartGame);
-        startButton.setOnClickListener(v -> {
+        Button btnMode = findViewById(R.id.btnButtonsMode);
+        Button sensorMode = findViewById(R.id.btnSensorsMode);
+        Button historyMode = findViewById(R.id.btnHistory);
+
+        btnMode.setOnClickListener(v -> {
             Intent intent = new Intent(StartGameActivity.this, MainActivity.class);
+            intent.putExtra("mode", "buttons");
+            startActivity(intent);
+        });
+
+        sensorMode.setOnClickListener(v -> {
+            Intent intent = new Intent(StartGameActivity.this, MainActivity.class);
+            intent.putExtra("mode", "sensors");
+            startActivity(intent);
+        });
+
+        historyMode.setOnClickListener(v -> {
+            Intent intent = new Intent(StartGameActivity.this, HistoryActivity.class);
             startActivity(intent);
         });
     }
