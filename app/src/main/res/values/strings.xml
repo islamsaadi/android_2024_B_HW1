@@ -8,4 +8,6 @@
     <string name="sensors_mode">Sensors Mode</string>
     <string name="achievements">Achievements</string>
     <string name="car_icon">car icon</string>
+    <string name="score_0">Score: 0</string>
+    <string name="player_records">Player Records</string>
 </resources>

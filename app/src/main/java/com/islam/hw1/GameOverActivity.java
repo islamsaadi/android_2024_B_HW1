@@ -15,7 +15,7 @@ public class GameOverActivity extends AppCompatActivity {
 
         Button playAgainButton = findViewById(R.id.btnPlayAgain);
         playAgainButton.setOnClickListener(v -> {
-            Intent intent = new Intent(GameOverActivity.this, MainActivity.class);
+            Intent intent = new Intent(GameOverActivity.this, StartGameActivity.class);
             startActivity(intent);
             finish();
         });

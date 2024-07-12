@@ -5,8 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/mainLayout"
+    android:id="@+id/activity_main"
     tools:context=".MainActivity">
+
 
 
     <LinearLayout
@@ -19,6 +20,11 @@
 
     </LinearLayout>
 
+    <com.islam.hw1.RoadLinesView
+        android:id="@+id/roadLinesView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <ImageView
         android:id="@+id/car"
         android:layout_width="50dp"
@@ -29,6 +35,33 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="100dp"
         app:tint="#03A9F4" />
+
+    <TextView
+        android:id="@+id/scoreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/score_0"
+        android:textSize="24sp"
+        android:textColor="@color/buttonTextColor"
+        android:background="#8BC34A"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:padding="10sp"
+        />
+
+    <TextView
+        android:id="@+id/distanceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="16dp"
+        android:text="0 m"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:background="@color/black"
+        android:padding="5sp"/>
 
     <Button
         android:id="@+id/btnLeft"
@@ -77,10 +110,5 @@
         android:orientation="horizontal">
 
     </LinearLayout>
-
-    <com.islam.hw1.RoadLinesView
-        android:id="@+id/roadLinesView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </RelativeLayout>

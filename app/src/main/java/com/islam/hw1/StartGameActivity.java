@@ -30,7 +30,7 @@ public class StartGameActivity extends AppCompatActivity {
         });
 
         historyMode.setOnClickListener(v -> {
-            Intent intent = new Intent(StartGameActivity.this, HistoryActivity.class);
+            Intent intent = new Intent(StartGameActivity.this, com.islam.hw1.HistoryActivity.class);
             startActivity(intent);
         });
     }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,9 +39,11 @@ public class GameManager {
 
     private final SharedPreferences sharedPreferences;
     private static final String PREFS_NAME = "game_prefs";
-    private static final String KEY_POINTS = "points";
 
-    public GameManager(Context context, String mode, Car car, LaneManager laneManager, Button btnLeft, Button btnRight, int laneCount) {
+    private final TextView pointsTextView;
+
+
+    public GameManager(Context context, String mode, Car car, LaneManager laneManager, Button btnLeft, Button btnRight, int laneCount, TextView pointsTextView) {
         this.context = context;
         this.car = car;
         this.laneManager = laneManager;
@@ -52,6 +55,7 @@ public class GameManager {
         this.coins = new ArrayList<>();
         this.sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         this.mode = mode;
+        this.pointsTextView = pointsTextView;
 
     }
 
@@ -174,14 +178,7 @@ public class GameManager {
         }
     }
 
-    private void savePoints() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(KEY_POINTS, score);
-        editor.apply();
-    }
-
     private void gameOver() {
-        savePoints();
         if (gameListener != null)
             gameListener.onGameOver();
     }
@@ -191,8 +188,18 @@ public class GameManager {
         this.gameListener = gameListener;
     }
 
+    public void setScore(int score) {
+        if(score >= 0)
+            this.score = score;
+    }
+
     public interface GameListener{
         void onGameOver();
         void onCrashWithObstacle(int gameLiveLeft);
     }
+
+    public int getScore() {
+        return score;
+    }
+
 }
