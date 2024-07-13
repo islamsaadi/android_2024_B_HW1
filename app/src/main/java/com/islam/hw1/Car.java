@@ -1,7 +1,6 @@
 package com.islam.hw1;
 
 import android.graphics.Rect;
-import android.graphics.RenderNode;
 import android.view.View;
 import android.widget.ImageView;
 
