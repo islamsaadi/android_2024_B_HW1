@@ -1,7 +1,7 @@
 package com.islam.hw1;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -37,13 +37,13 @@ public class GameManager {
 
     private final String mode;
 
-    private final SharedPreferences sharedPreferences;
     private static final String PREFS_NAME = "game_prefs";
 
-    private final TextView pointsTextView;
+    private final MediaPlayer coinCollectSound;
 
 
-    public GameManager(Context context, String mode, Car car, LaneManager laneManager, Button btnLeft, Button btnRight, int laneCount, TextView pointsTextView) {
+
+    public GameManager(Context context, String mode, Car car, LaneManager laneManager, Button btnLeft, Button btnRight, int laneCount) {
         this.context = context;
         this.car = car;
         this.laneManager = laneManager;
@@ -53,10 +53,8 @@ public class GameManager {
         this.btnRight = btnRight;
         this.laneCount = laneCount;
         this.coins = new ArrayList<>();
-        this.sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         this.mode = mode;
-        this.pointsTextView = pointsTextView;
-
+        this.coinCollectSound = MediaPlayer.create(context, R.raw.coin_collect);
     }
 
     public void updateGame() {
@@ -151,7 +149,9 @@ public class GameManager {
             if (car.checkCollision(coin)) {
                 coinsToRemove.add(coin);
                 score += 10;
+                coinCollectSound.start();
                 animateCoinCollection(coin);
+
             }
         }
         for (ImageView coin : coinsToRemove) {

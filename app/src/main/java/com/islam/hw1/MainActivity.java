@@ -79,8 +79,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static final String PREFS_NAME = "game_prefs";
     private static final String KEY_ACHIEVEMENTS = "achievements";
     private float[] smoothedValues = new float[3]; // To store the smoothed sensor values
-    private long lastSensorUpdate = 0;
-
     private long lastMoveTime = 0; // To track the last movement time
 
     private TextView distanceTextView;
@@ -107,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 vibrator.vibrate(500); // Vibrate for 500 milliseconds
             }
         }
+
     };
 
     @Override
@@ -138,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         crashSound = MediaPlayer.create(this, R.raw.crash_sound);
 
 
-        gameManager = new GameManager(this, mode, car, laneManager, btnLeft, btnRight, laneCount, scoreTextView);
+        gameManager = new GameManager(this, mode, car, laneManager, btnLeft, btnRight, laneCount);
         gameManager.setGameListener(gameListener);
         initializeControls();
         initializeLives(initialLives);
